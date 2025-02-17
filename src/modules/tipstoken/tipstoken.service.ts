@@ -11,7 +11,7 @@ import {
   TOKEN_PROGRAM_ID,
   getOrCreateAssociatedTokenAccount,
 } from '@solana/spl-token';
-import { TransactionType } from '@prisma/client';
+import { Transaction, TransactionType } from '@prisma/client';
 
 @Injectable()
 export class TipstokenService {
@@ -52,7 +52,7 @@ export class TipstokenService {
     ); // todo: get key from env
   }
 
-  async airdrop(body: AirdropDto, amount: number): Promise<{ tx: string }> {
+  async airdrop(body: AirdropDto, amount: number): Promise<Transaction> {
     const { recipientAddress } = body;
     try {
       const recipientWallet = new PublicKey(recipientAddress);
@@ -79,7 +79,9 @@ export class TipstokenService {
         })
         .rpc();
 
-      await this.prisma.transaction.create({
+      console.log(tx);
+
+      return this.prisma.transaction.create({
         data: {
           type: TransactionType.AIRDROP,
           sender: this.provider.wallet.publicKey.toBase58(),
@@ -88,8 +90,6 @@ export class TipstokenService {
           token: 'tips-token', // todo: get token name from const
         },
       });
-
-      return { tx };
     } catch (error) {
       throw new HttpException(
         'Airdrop failed: ' + error.message,
