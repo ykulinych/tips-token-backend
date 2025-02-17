@@ -22,6 +22,8 @@
     "@prisma/client": "^6.3.1",
     "@solana/spl-token": "^0.4.12",
     "@solana/web3.js": "^1.98.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "prisma": "^6.3.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
